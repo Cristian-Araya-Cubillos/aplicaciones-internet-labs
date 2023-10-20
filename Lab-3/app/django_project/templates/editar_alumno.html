@@ -1,0 +1,26 @@
+<!-- editar_alumno.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Alumno</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/breadcrumbs.css' %}">
+</head>
+<body>
+    <h1>Editar Alumno</h1>
+    <div class="breadcrumbs">
+        <ul>
+            {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <a href="{% url 'alumnos_list' %}">Volver a la Lista de Alumnos</a>
+</body>
+</html>

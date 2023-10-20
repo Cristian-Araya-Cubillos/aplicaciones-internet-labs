@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Alumnos</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/breadcrumbs.css' %}">
+</head>
+<body>
+
+    <h1>Lista de Alumnos</h1>
+    
+    <div class="breadcrumbs">
+        <ul>
+            {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Acciones</th> <!-- Nueva columna para acciones -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for alumno in alumnos %}
+                <tr>
+                    <td>{{ alumno.nombre }}</td>
+                    <td>{{ alumno.apellido_paterno }}</td>
+                    <td>{{ alumno.apellido_materno }}</td>
+                    <td>{{ alumno.fecha_nacimiento }}</td>
+                    <td>
+                        <a href="{% url 'editar_alumno' alumno.pk %}">Editar</a> |
+                        <a href="{% url 'eliminar_alumno' alumno.pk %}">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

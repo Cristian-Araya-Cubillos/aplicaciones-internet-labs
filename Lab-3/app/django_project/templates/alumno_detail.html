@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de Alumno</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/breadcrumbs.css' %}">
+</head>
+<body>
+
+    <h1>Detalles de Alumno</h1>
+    <div class="breadcrumbs">
+        <ul>
+            {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <p>Nombre: {{ alumno.nombre }}</p>
+    <p>Apellido Paterno: {{ alumno.apellido_paterno }}</p>
+    <p>Apellido Materno: {{ alumno.apellido_materno }}</p>
+    <p>Fecha de Nacimiento: {{ alumno.fecha_nacimiento }}</p>
+    <h2>Asignaturas inscritas:</h2>
+    <ul>
+        {% for asignatura in alumno.asignaturas.all %}
+            <li>{{ asignatura.codigo }} - {{ asignatura.nombre }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

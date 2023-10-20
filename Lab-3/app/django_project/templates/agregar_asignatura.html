@@ -1,0 +1,24 @@
+<!-- agregar_asignatura.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agregar Asignatura</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/breadcrumbs.css' %}">
+</head>
+<body>
+    <h1>Agregar Asignatura</h1>
+    <div class="breadcrumbs">
+        <ul>
+            {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>

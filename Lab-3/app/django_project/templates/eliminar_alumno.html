@@ -1,0 +1,27 @@
+<!-- eliminar_alumno.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Alumno</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/breadcrumbs.css' %}">
+</head>
+<body>
+    <h1>Eliminar Alumno</h1>
+    <div class="breadcrumbs">
+        <ul>
+            {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <p>¿Estás seguro de que deseas eliminar al alumno "{{ alumno }}"?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Eliminar</button>
+    </form>
+
+    <a href="{% url 'alumnos_list' %}">Cancelar</a>
+</body>
+</html>
