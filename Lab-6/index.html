@@ -1,55 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<meta chrset="UTF 8">
-<title>Movies</title>
-<link rel="stylesheet" href="css/bootstrap.css"/>
+  <meta charset="UTF-8">
+  <title>Movies</title>
+  <link rel="stylesheet" href="css/bootstrap.css"/>
+  <style>
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 18px;
+      text-align: left;
+    }
+    .styled-table th, .styled-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    .styled-table th {
+      background-color: #333;
+      color: white;
+    }
+    .styled-table tbody tr:hover {
+      background-color: rgba(0,0,0,0.05);
+    }
+  </style>
 </head>
-<body ng-app="sampleApp">
+<body ng-app="sampleApp" ng-controller="MoviesController">
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-<script src="lib/bootstrap.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+  <script src="lib/bootstrap.js"></script>
 
-<h1> Movies</h1>
-<table class="table table-striped">
-<thead>
-<tr> <th>#</th><th>Ejemplo</th><th>Description</th><th></th> </tr> </thead>
-<tbody>
-<tr>
-<td>l</td><td>l</td><td>Movie 1</td>
-<td><a href="#!Movie/1">Movie details</a></td>
-</tr>
-<tr>
-<td>2</td><td>2</td><td>Movie 2</td>
-<td><a href="#!Movie/2">Movie details</a></td>
-</tr>
-<tr>
-<td>3</td><td>3</td><td>Movie 3</td>
-<td><a href="#!Movie/3">Movie details</a></td>
-</tr>
-</tbody>
+  <h1> Movies</h1>
+  
+  <form>
+    <select name="genres" id="genres" 
+      ng-model="selectedGenreName" 
+      ng-options="genre.slug as genre.slug for genre in genres"> 
+    </select>
+    <button ng-click="getMoviesByGenre(selectedGenreName)">Show Genre</button>
+  </form>
+  
+  <table class="styled-table">
+    <thead class="thead-dark">
+        <tr>
+            <td>ID</td>
+            <td>Titulo</td>
+            <td>Descripción</td>
+            <td>Imagen</td>
+            <td>Detalles</td>
+        </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="movies in movies">
+        <td>{{$index + 1}}</td>
+        <td>{{movies.title}}</td>
+        <td>{{movies.description}}</td>
+        <td><img src={{movies.poster.url}} width="200" height="200"></td>
+        <td><a href="#!movies/{{movies.id}}">Detalles de la Pelicula</a></td>
+      </tr>
+    </tbody>
 </table>
 
-<div ng-view></div>
-<script>
-var sampleApp = angular.module('sampleApp',['ngRoute']);
+  <div ng-view></div>
 
-sampleApp.config(
-function($routeProvider){
-$routeProvider.
-when('/Movie/:movieId',{
-templateUrl : 'movie.html',
-controller: 'AngularController'
-})
-});
+  <script>
+    var sampleApp = angular.module('sampleApp', ['ngRoute']);
 
-sampleApp.controller('AngularController',function($scope,$routeParams) {
+    sampleApp.config(function($routeProvider) {
+      $routeProvider.
+      when('/Movie/:movieId', {
+        templateUrl: 'movie.html',
+        controller: 'AngularController'
+      });
+    });
 
-$scope.movieid=$routeParams.MovieId
+    sampleApp.controller('MoviesController', function($scope, $http) {
+      $http.get('http://api.filmon.com/api/vod/genres')
+        .then(function(response) {
+          $scope.genres = response.data.response;
+        });
 
-});
-</script>
+        $scope.myFunction = function() {
+          console.log('El género seleccionado es: ' + $scope.selectedGenreName);
+      }
+
+        $scope.getMoviesByGenre = function(genreName) {
+          $http.get('http://api.filmon.com/api/vod/search?genre=' + genreName)
+            .then(function(response) {
+              $scope.movies = response.data.response;
+              console.log($scope.movies)
+            }), function errorCallback(response) {
+              alert("Error 2 xd");
+          }
+        }
+    });
+
+    sampleApp.controller('AngularController', function($scope, $routeParams) {
+      $scope.movieid = $routeParams.MovieId
+    });
+  </script>
 </body>
 </html>
+
+
